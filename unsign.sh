@@ -102,7 +102,7 @@ for signedDesc; do
 	sha256="$(sha256sum "$tmp/manifest.json" | cut -d' ' -f1)"
 	export manifestDigest="sha256:$sha256" manifestSize
 
-	manifestDesc="$(jq <<<"$signedDesc" '
+	manifestDesc="$(jq <<<"$signedDesc" -c '
 		. * {
 			mediaType: "application/vnd.docker.distribution.manifest.v1+json",
 			digest: env.manifestDigest,
