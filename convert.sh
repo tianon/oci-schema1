@@ -113,8 +113,8 @@ for schema1Desc; do
 
 		# the difference between the OCI config structure and the old v1 image format is minimal, so we can get away with supplementing the existing object with more fields for the purposes of conversion
 		| $history[-1]
-		# (minus the field we created)
-		| del(.empty_layer, .layer_blob)
+		# (minus the fields we created + fields we should not persist in the config)
+		| del(.empty_layer, .layer_blob, .throwaway, .size, .id, .parent)
 		| . + {
 			history: ($history | map(
 				{}
@@ -157,7 +157,9 @@ for schema1Desc; do
 		layers: [],
 		# TODO should we add an annotation saying this was converted?
 	}')"
+	echo "layers (${#layers[@]}):"
 	for layer in "${layers[@]}"; do
+		echo -n " - $layer => "
 		blob="blobs/${layer//://}"
 		layerSize="$(stat -c '%s' "$blob")"
 		if [ "$layerSize" = 0 ]; then
@@ -187,6 +189,7 @@ for schema1Desc; do
 			echo >&2 "warning: layer '$layer' is empty (when uncompressed), but we didn't detect it properly! (please file a bug)"
 		fi
 		export diffId="sha256:$diffId" layer layerSize
+		echo "$diffId ($layerSize)"
 		config="$(jq <<<"$config" -c '.rootfs.diff_ids += [ env.diffId ]')"
 		manifest="$(jq <<<"$manifest" -c '
 			.layers += [ {
