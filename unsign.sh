@@ -19,20 +19,8 @@ tmp="$(mktemp --directory --tmpdir 'schema1-unsign-XXXXXXXXXX')"
 trap "$(printf 'rm -rf %q' "$tmp")" EXIT
 
 # https://github.com/opencontainers/image-spec/blob/v1.1.0/image-layout.md
-if [ ! -s oci-layout ]; then
-	jq -n '{ imageLayoutVersion: "1.0.0" }' > "$tmp/oci-layout"
-	mv "$tmp/oci-layout" .
-fi
-# TODO validate that "imageLayoutVersion" is correct in a pre-existing layout
-if [ ! -s index.json ]; then
-	jq -n '{
-		schemaVersion: 2,
-		mediaType: "application/vnd.oci.image.index.v1+json",
-		manifests: [],
-	}' > "$tmp/index.json"
-	mv "$tmp/index.json" .
-fi
-# TODO validate that "index.json" contains only a single object and that it's valid
+[ -s oci-layout ] # TODO validate that "imageLayoutVersion" is correct
+[ -s index.json ] # TODO validate that "index.json" contains only a single object and that it's valid
 
 shell="$(jq -r '
 	"set -- \(
