@@ -13,5 +13,6 @@ Usage:
 $ ./pull.sh oci tianon/scratch:schema1
 $ ./unsign.sh oci
 $ ./convert.sh oci
-$ # TODO write ./strip.sh or ./clean.sh or something to clean out the schema1 cruft
+$ # TODO write ./strip.sh or ./clean.sh or something to clean out the schema1 cruft from index.json
+$ # TODO `tar -cC oci . | docker load` (or similar, assuming Docker v24+)
 ```
