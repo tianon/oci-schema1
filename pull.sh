@@ -1,6 +1,8 @@
 #!/usr/bin/env bash
 set -Eeuo pipefail
 
+# pull schema1 images into an OCI layout
+
 # usage: ./pull.sh oci-layout-output-directory/ image-in-registry [image ...]
 
 oci="$1"; shift
@@ -63,6 +65,7 @@ for img; do
 						# TODO pull "platform" out of .history[0].v1Compatibility ("os" + "architecture")
 						annotations: {
 							"org.opencontainers.image.ref.name": env.img,
+							"io.containerd.image.name": env.img,
 						},
 					}
 					| @json
@@ -72,8 +75,8 @@ for img; do
 	)"
 	eval "$shell"
 
-	mkdir -p blobs/sha256
-	mv "$tmp/manifest.json" "blobs/sha256/$sha256"
+	mkdir -p blobs/sha256 # TODO
+	mv "$tmp/manifest.json" "blobs/${manifestDigest//://}"
 
 	jq <<<"$manifestDescriptor" .
 
@@ -87,13 +90,13 @@ for img; do
 			echo >&2 "error: '$layer' does not appear to use sha256 (as is required by the spec)"
 			exit 1
 		fi
-		target="blobs/sha256/$sha256"
+		target="blobs/${layer//://}"
 		if [ -s "$target" ]; then
 			sha256sum <<<"$sha256 *$target" --check --quiet --strict -
 		else
 			crane blob "$repo@$layer" > "$tmp/blob"
 			sha256sum <<<"$sha256 *$tmp/blob" --check --quiet --strict -
-			mv "$tmp/blob" "blobs/sha256/$sha256"
+			mv "$tmp/blob" "blobs/${layer//://}"
 		fi
 	done
 
