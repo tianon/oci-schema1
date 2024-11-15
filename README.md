@@ -33,3 +33,9 @@ $ # (see https://github.com/google/go-containerregistry/blob/v0.20.2/pkg/v1/tarb
 $ # "load" the result into Docker (could also "crane push", "ctr image import", etc)
 $ tar -cC oci . | docker load
 ```
+
+## Runtime Support for schema1
+
+- https://docs.docker.com/engine/deprecated/#pushing-and-pulling-with-image-manifest-v2-schema-1
+- https://containerd.io/releases/#deprecated-features
+  - https://github.com/containerd/containerd/blob/66f7290240a784fb4c3a16db5c2751177e90f95e/docs/containerd-2.0.md#docker-schema-1-image-support-is-disabled-by-default
