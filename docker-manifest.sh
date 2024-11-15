@@ -8,6 +8,8 @@ set -Eeuo pipefail
 
 oci="$1"; shift
 
+[ "$#" -eq 0 ] # TODO better error handling
+
 mkdir -p "$oci"
 cd "$oci"
 
