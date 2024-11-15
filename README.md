@@ -16,17 +16,19 @@ $ # (this script uses "crane"; get it from https://github.com/google/go-containe
 
 $ # strip signatures from signed schema1 images (no-op if no images are signed)
 $ ./unsign.sh oci
+$ # (see https://github.com/moby/moby/commit/011bfd666eeb21a111ca450c42a3893ad03c9324)
 
 $ # convert (unsigned) schema1 images into OCI media types
-$ # NOTE: this is the expensive step, since we have to calculate "DiffIDs" for all layers
 $ ./convert.sh oci
+$ # NOTE: this is the expensive step, since we have to calculate "DiffIDs" for all layers
 
 $ # remove now duplicated tag names from the OCI layout (in preference order OCI > schema2 > schema1)
 $ ./clean.sh oci
 
 $ # if you're on Docker v23 or older, you'll need "manifest.json"
-$ # (see https://github.com/google/go-containerregistry/blob/v0.20.2/pkg/v1/tarball/README.md)
+$ #  => skip this if your target is Docker v24+ or non-Docker
 $ ./docker-manifest.sh oci
+$ # (see https://github.com/google/go-containerregistry/blob/v0.20.2/pkg/v1/tarball/README.md)
 
 $ # "load" the result into Docker (could also "crane push", "ctr image import", etc)
 $ tar -cC oci . | docker load
