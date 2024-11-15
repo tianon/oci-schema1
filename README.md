@@ -10,9 +10,18 @@ OCI image-spec:
 Usage:
 
 ```console
+$ # pull (likely "signed") schema1 images into local OCI layout
 $ ./pull.sh oci tianon/scratch:schema1
+
+$ # strip signatures from signed schema1 images (no-op if no images are signed)
 $ ./unsign.sh oci
+
+$ # convert (unsigned) schema1 images into OCI media types
+$ # NOTE: this is the expensive step, since we have to calculate "DiffIDs" for all layers
 $ ./convert.sh oci
-$ # TODO write ./strip.sh or ./clean.sh or something to clean out the schema1 cruft from index.json
+
+$ # remove now duplicated tag names from the OCI layout (in preference order OCI > schema2 > schema1)
+$ ./clean.sh oci
+
 $ # TODO `tar -cC oci . | docker load` (or similar, assuming Docker v24+)
 ```
