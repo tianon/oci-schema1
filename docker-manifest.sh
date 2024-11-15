@@ -30,7 +30,7 @@ shell="$(jq -r '
 			$desc
 			| .annotations["io.containerd.image.name"]
 			// .annotations["org.opencontainers.image.ref.name"]
-			// .digest # TODO figure out if Docker can actually handle this 😇
+			// .digest # this ~works, but with the caveat that it imports as a dangling image and thus this "manifest digest" is lost
 		]
 	)
 	| to_entries
