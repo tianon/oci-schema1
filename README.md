@@ -23,5 +23,10 @@ $ ./convert.sh oci
 $ # remove now duplicated tag names from the OCI layout (in preference order OCI > schema2 > schema1)
 $ ./clean.sh oci
 
-$ # TODO `tar -cC oci . | docker load` (or similar, assuming Docker v24+)
+$ # if you're on Docker v23 or older, you'll need "manifest.json"
+$ # (see https://github.com/google/go-containerregistry/blob/v0.20.2/pkg/v1/tarball/README.md)
+$ ./docker-manifest.sh oci
+
+$ # "load" the result into Docker (could also "crane push", "ctr image import", etc)
+$ tar -cC oci . | docker load
 ```
