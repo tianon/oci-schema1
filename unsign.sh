@@ -40,8 +40,8 @@ for signedDesc; do
 
 	shell="$(jq -r <<<"$signedDesc" '
 		@sh "export name=\(
-			.annotations["org.opencontainers.image.ref.name"]
-			// .annotations["io.containerd.image.name"]
+			.annotations["io.containerd.image.name"]
+			// .annotations["org.opencontainers.image.ref.name"]
 			// .digest
 		)",
 		@sh "export signedDigest=\(.digest)",

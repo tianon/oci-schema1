@@ -39,8 +39,8 @@ for schema1Desc; do
 
 	shell="$(jq -r <<<"$schema1Desc" '
 		@sh "export name=\(
-			.annotations["org.opencontainers.image.ref.name"]
-			// .annotations["io.containerd.image.name"]
+			.annotations["io.containerd.image.name"]
+			// .annotations["org.opencontainers.image.ref.name"]
 			// .digest
 		)",
 		@sh "export schema1Digest=\(.digest)",
