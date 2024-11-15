@@ -12,6 +12,7 @@ Usage:
 ```console
 $ # pull (likely "signed") schema1 images into local OCI layout
 $ ./pull.sh oci tianon/scratch:schema1
+$ # (this script uses "crane"; get it from https://github.com/google/go-containerregistry/releases)
 
 $ # strip signatures from signed schema1 images (no-op if no images are signed)
 $ ./unsign.sh oci
